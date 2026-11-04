@@ -1,0 +1,15 @@
+{
+  "name": "mighty-ads-plugins",
+  "description": "MightyAI plugins for reviewing and managing Meta, Google and ChatGPT ads.",
+  "owner": {
+    "name": "MightyAI",
+    "url": "https://www.getmighty.ai/"
+  },
+  "plugins": [
+    {
+      "name": "mighty-ads",
+      "source": "./claude",
+      "description": "Review and optimize Meta Ads, Google Ads and ChatGPT Ads through focused merchant workflows, and manage supported ad settings in MightyAI."
+    }
+  ]
+}
