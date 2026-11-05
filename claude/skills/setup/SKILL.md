@@ -7,6 +7,10 @@ description: Help a user connect Mighty Ads to the Clerk workspace they choose, 
 
 Connect Mighty through your host's MCP connection flow and complete Clerk sign-in.
 In Codex, use the plugin's account settings; in Claude Code, use its MCP sign-in flow.
+In Claude Desktop, enable the plugin's `mighty` connector and complete browser
+sign-in. To change its workspace, open Settings → Connectors → mighty, disconnect
+and reconnect, select the intended workspace during sign-in, then start a new chat
+and discover brands again.
 The organization chosen there is the connection's authorization boundary. Discover
 its brands with `list_organization_brands`; never request organization IDs, brand
 IDs, provider keys, tokens or OTPs in chat.
