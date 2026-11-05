@@ -1,6 +1,6 @@
 # Mighty Ads
 
-Review and manage Meta Ads, Google Search and ChatGPT Ads in your AI assistant
+Review and manage Meta Ads, Google Ads and ChatGPT Ads in your AI assistant
 using ten focused skills.
 Ask for a weekly performance review, wasted-spend analysis, Google Search query
 recommendations, or Meta creative, audience and customer drop-off analysis.
