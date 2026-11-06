@@ -11,8 +11,9 @@ short router, not an account audit.
 Resolve the requested or selected brand with `list_organization_brands`, following
 [the setup skill's](../setup/SKILL.md) brand and workspace boundaries. After
 resolving one brand, run lightweight `check_google_ads_readiness`,
-`check_meta_ads_readiness` and `check_chatgpt_ads_readiness` checks. These reads
-need no confirmation and may run in parallel. A failed check means availability
+`check_meta_ads_readiness`, `check_chatgpt_ads_readiness` and
+`check_reddit_ads_readiness` checks. These reads need no confirmation and may
+run in parallel. A failed check means availability
 is unknown unless its message explicitly says that channel must be connected;
 that is a confirmed unavailable channel. For ChatGPT Ads, working advertiser
 reads can support read workflows even when launch measurement is incomplete;
@@ -33,6 +34,9 @@ Show two compact numbered sections using only choices relevant to this brand:
 - Google: optimize search queries and keywords, or create and manage supported
   Search campaigns.
 - ChatGPT Ads: create or manage campaigns, ads, bids and delivery settings.
+- Reddit: review campaigns, ad groups, ads and performance by day or by
+  community, placement or geography; with a manage connection, create paused
+  campaigns and ad groups, change budgets, or pause and activate.
 
 Combine overlapping choices instead of listing the same workflow per channel.
 Keep the initial menu to at most seven choices. Name connected channels beside a

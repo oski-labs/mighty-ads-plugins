@@ -8,8 +8,9 @@ description: Review recent advertising performance across connected channels whe
 Read [the analysis principles](../references/ads-analysis-principles.md) and
 [response pattern](../references/workflow-response-pattern.md). For each selected
 channel, read only its existing reference: [ChatGPT Ads](../manage-ads/references/chatgpt-ads.md),
-[Google Ads](../manage-ads/references/google-ads.md), or
-[Meta Ads](../manage-ads/references/meta-ads.md).
+[Google Ads](../manage-ads/references/google-ads.md),
+[Meta Ads](../manage-ads/references/meta-ads.md) or
+[Reddit Ads](../manage-ads/references/reddit-ads.md).
 
 Resolve the brand and requested channels through the existing setup and
 `manage-ads` rules. If the user did not name a channel, check readiness and review

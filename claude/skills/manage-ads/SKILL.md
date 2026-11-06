@@ -1,6 +1,6 @@
 ---
 name: manage-ads
-description: Inspect Meta Ads, Google Ads and ChatGPT Ads through MightyAI, research Google Search keywords and forecasts, find products, create paused Meta photo, Google Search and ChatGPT campaigns and ads, and manage supported Meta, Google and ChatGPT settings. Meta supports reads, paused photo creation, guarded settings edits and explicit pause/activation.
+description: Inspect Meta Ads, Google Ads, Reddit Ads and ChatGPT Ads through MightyAI, research Google Search keywords and forecasts, find products, create paused Meta photo, Google Search and ChatGPT campaigns and ads, and manage supported Meta, Google and ChatGPT settings. Meta supports reads, paused photo creation, guarded settings edits and explicit pause/activation. Reddit Ads supports reads, paused campaign and ad-group creation, budget edits and pause/activation.
 ---
 
 # Manage ads
@@ -19,6 +19,8 @@ credentials, or carry provider-account selections or write approval across brand
 
 For ChatGPT Ads, read [its channel reference](references/chatgpt-ads.md).
 For Google Ads, read [its channel reference](references/google-ads.md).
+For Reddit Ads, read [its channel reference](references/reddit-ads.md). Use its read tools
+for inventory and performance, and its editing context, creation, budget and status tools for separately approved changes; ads are not created here.
 For Meta Ads, read [its channel reference](references/meta-ads.md). Use its read tools
 for inventory and performance, and its separate photo-creation tools after approval.
 Use its editing context and edit/status tools for separately approved changes; creative replacement is unavailable.

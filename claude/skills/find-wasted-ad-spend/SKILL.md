@@ -8,8 +8,9 @@ description: Find avoidable advertising spend and safer reallocations across con
 Read [the analysis principles](../references/ads-analysis-principles.md) and
 [response pattern](../references/workflow-response-pattern.md). For each selected
 channel, read only its existing reference: [ChatGPT Ads](../manage-ads/references/chatgpt-ads.md),
-[Google Ads](../manage-ads/references/google-ads.md), or
-[Meta Ads](../manage-ads/references/meta-ads.md).
+[Google Ads](../manage-ads/references/google-ads.md),
+[Meta Ads](../manage-ads/references/meta-ads.md) or
+[Reddit Ads](../manage-ads/references/reddit-ads.md).
 
 Resolve the exact brand, channels, dates and economic goal. Use the merchant's
 CPA, ROAS or other objective-specific target when available. Without a target,
@@ -37,10 +38,14 @@ future savings or lift as conditional.
 Use channel-specific evidence: Google search-term and keyword questions may route
 to the Google optimizer; Meta fatigue or audience findings may route to the
 corresponding Meta workflow; ChatGPT Ads may use its account or campaign spend
-opportunity tool. Do not blend unlike conversion definitions into one ranking.
+opportunity tool; Reddit Ads may break spend down by community, interest, keyword
+or placement through its performance tool. Do not blend unlike conversion
+definitions into one ranking.
 
 Lead with the largest actionable opportunity, then show at most three prioritized
 actions with the amount affected and a short why. Include a compact **Do not cut**
 note when it protects an item that superficially looks weak. Offer numbered next
-steps. Execute only supported, explicitly confirmed Google or ChatGPT Ads changes;
-Meta recommendations remain prepared actions until Meta write tools exist.
+steps. Execute only supported, explicitly confirmed Google, ChatGPT or Reddit Ads
+changes; Reddit changes are limited to budgets and pause or activation through its
+guarded workflow. Meta recommendations remain prepared actions until Meta write
+tools exist.
