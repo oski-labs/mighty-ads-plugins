@@ -1,0 +1,41 @@
+name: Verify public plugin release
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      # The verifier comes from the trusted base, never from the proposed tree.
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          path: trusted
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          path: candidate
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14.9'
+      - name: Verify release provenance and package identity
+        shell: bash
+        run: |
+          if [[ -f candidate/release.json ]]; then
+            python trusted/scripts/public_ads_plugin.py validate --root candidate --base trusted
+          elif [[ -f trusted/release.json ]]; then
+            echo 'Removing release provenance is not allowed.' >&2
+            exit 1
+          else
+            echo 'Infrastructure bootstrap: no release selected yet.'
+          fi
