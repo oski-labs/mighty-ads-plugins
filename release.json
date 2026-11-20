@@ -1,0 +1,39 @@
+{
+  "checksums_url": "https://plugins.getmighty.ai/mighty-ads/0.1.33/SHA256SUMS.txt",
+  "commit": "43b0605f2aa50a2d462e5db715c19fb71cec92d4",
+  "packages": {
+    "antigravity": {
+      "filename": "mighty-ads-antigravity-0.1.33-g43b0605f2aa5.zip",
+      "sha256": "2dfce007ea8f014b19f3f7173c264602fbe4962ca48f70e00ef1349cda6255bd",
+      "size": 353768,
+      "url": "https://plugins.getmighty.ai/mighty-ads/0.1.33/mighty-ads-antigravity-0.1.33-g43b0605f2aa5.zip"
+    },
+    "claude": {
+      "filename": "mighty-ads-claude-0.1.33-g43b0605f2aa5.zip",
+      "sha256": "23777c7e680036a510a3759b49f597c81c98ac0342f55c94f77a34332f467e82",
+      "size": 355992,
+      "url": "https://plugins.getmighty.ai/mighty-ads/0.1.33/mighty-ads-claude-0.1.33-g43b0605f2aa5.zip"
+    },
+    "codex": {
+      "filename": "mighty-ads-chatgpt-0.1.33-g43b0605f2aa5.zip",
+      "sha256": "5db2f7ff23544b793a4ed936ba39596878150a8b34ee3827fd4fb68e5fbd418b",
+      "size": 751337,
+      "url": "https://plugins.getmighty.ai/mighty-ads/0.1.33/mighty-ads-chatgpt-0.1.33-g43b0605f2aa5.zip"
+    },
+    "gemini": {
+      "filename": "mighty-ads-gemini-0.1.33-g43b0605f2aa5.zip",
+      "sha256": "bea358c85ff8d832ed91f834dc9ccd6656cc64cf1d1e3265982e53ba7fef17a2",
+      "size": 353452,
+      "url": "https://plugins.getmighty.ai/mighty-ads/0.1.33/mighty-ads-gemini-0.1.33-g43b0605f2aa5.zip"
+    },
+    "openai": {
+      "filename": "mighty-ads-0.1.33-g43b0605f2aa5-plugin.zip",
+      "sha256": "0f407dcf0daff08397ac5cb01af0464c6ce235052d0764c0815f7e062110bdd3",
+      "size": 723230,
+      "url": "https://plugins.getmighty.ai/mighty-ads/0.1.33/mighty-ads-0.1.33-g43b0605f2aa5-plugin.zip"
+    }
+  },
+  "release_url": "https://plugins.getmighty.ai/mighty-ads/0.1.33/release.json",
+  "schema_version": 1,
+  "version": "0.1.33"
+}

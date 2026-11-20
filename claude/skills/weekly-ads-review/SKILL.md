@@ -9,8 +9,10 @@ Read [the analysis principles](../references/ads-analysis-principles.md) and
 [response pattern](../references/workflow-response-pattern.md). For each selected
 channel, read only its existing reference: [ChatGPT Ads](../manage-ads/references/chatgpt-ads.md),
 [Google Ads](../manage-ads/references/google-ads.md),
-[Meta Ads](../manage-ads/references/meta-ads.md) or
-[Reddit Ads](../manage-ads/references/reddit-ads.md).
+[Meta Ads](../manage-ads/references/meta-ads.md),
+[Reddit Ads](../manage-ads/references/reddit-ads.md),
+[Snapchat Ads](../manage-ads/references/snapchat-ads.md) or
+[TikTok Ads](../manage-ads/references/tiktok-ads.md).
 
 Resolve the brand and requested channels through the existing setup and
 `manage-ads` rules. If the user did not name a channel, check readiness and review
@@ -26,6 +28,10 @@ Start at campaign level using the channel's performance tool. Select the KPI fro
 each campaign objective, not one universal ROAS rule. Recompute rates from totals.
 Only drill into ads, search terms, audiences or placements when a material change
 needs an explanation; this is triage, not every deep audit at once.
+
+For Google PMax, use `list_google_pmax_performance` campaign totals and channel reports,
+then asset groups/assets when needed, following the Google reference. Compare the
+same complete dates; paused historical spend is not ongoing spend.
 
 Quietly determine coverage. A useful review can proceed with one connected channel
 or without every metric. State a missing conversion event, incomplete page or

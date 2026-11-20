@@ -33,6 +33,16 @@ is not proof that an ad delivered. Check dated impressions/spend and schedules.
 Creative details cover configured copy/media/destinations; dynamic assets do not
 establish the exact variation shown on each impression.
 
+When visual creative review helps the answer, use the selected ad's returned
+`assets` references and call `get_asset` with the required `asset_id` and selected
+brand. Keep each image or video connected to its ad, media role and carousel
+position. Fetch only the assets needed for the question. Image results include
+a preview; video and other file results can include a temporary download link.
+Request the same asset again when that link expires. Asset IDs resolve to the
+latest observed content, not a snapshot of an older answer. If media is missing
+or unavailable, preserve the performance analysis and say the visual could not
+be retrieved; do not substitute a different creative or download an arbitrary URL.
+
 ## Spend, results and drop-off
 
 Use `get_meta_performance` with explicit account-local `start_date` and

@@ -46,8 +46,9 @@ Return a concise verdict and, when supported:
 Do not claim a creative is tired from a generic frequency or CTR benchmark. This
 analysis changes nothing: offer an exact prepared pause, a new paused photo ad or a
 shareable creative brief. Apply a pause or new ad only through the
-[manage-ads workflow](../manage-ads/SKILL.md) after approval. Replacing an existing
-ad's creative is unavailable. Never imply a change was applied.
+`manage-ads` workflow after approval. Load that skill by name from the host's
+available skills or workflow prompts, not a filesystem path to another skill.
+Replacing an existing ad's creative is unavailable. Never imply a change was applied.
 
 Stay in the merchant's role; do not ask them to role-play an agency or creative
 profession. When the analysis produces a useful next step, always end with up to
