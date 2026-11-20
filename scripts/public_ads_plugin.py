@@ -504,6 +504,21 @@ def git_tree(github: Any, commit: str) -> tuple[str, dict[str, dict[str, str]]]:
     }
 
 
+def resolve_tag_commit(github: Any, target: dict[str, str]) -> str:
+    """Resolve lightweight or annotated Git tags to a commit."""
+    seen: set[str] = set()
+    while True:
+        sha = target["sha"]
+        if not re.fullmatch(r"[0-9a-f]{40}", sha) or sha in seen:
+            raise ValueError("Existing release tag has an invalid target")
+        if target["type"] == "commit":
+            return sha
+        if target["type"] != "tag":
+            raise ValueError("Existing release tag must point to a commit")
+        seen.add(sha)
+        target = github.call("GET", f"git/tags/{sha}")["object"]
+
+
 def validate_remote_tree(
     github: Any, commit: str, manifest: dict[str, Any], *, read: Any
 ) -> None:
@@ -546,8 +561,10 @@ def publish_github(
     tag = f"v{version}"
     refs = github.call("GET", f"git/matching-refs/tags/{tag}")
     matching = [item for item in refs if item["ref"] == f"refs/tags/{tag}"]
-    if matching and matching[0]["object"]["sha"] != commit:
-        validate_remote_tree(github, matching[0]["object"]["sha"], manifest, read=read)
+    if matching:
+        tagged_commit = resolve_tag_commit(github, matching[0]["object"])
+        if tagged_commit != commit:
+            validate_remote_tree(github, tagged_commit, manifest, read=read)
     releases = github.call("GET", "releases?per_page=100")
     newer = any(
         VERSION.fullmatch(item["tag_name"].removeprefix("v"))
@@ -619,6 +636,11 @@ def publish_github(
         ):
             raise ValueError("GitHub release assets did not verify")
     if existing["draft"]:
+        # Asset uploads may outlast the checkout's selection on main.
+        if github.call("GET", "git/ref/heads/main")["object"]["sha"] != commit:
+            raise ValueError(
+                "Public main advanced; rerun publication from current main"
+            )
         github.call(
             "PATCH",
             f"releases/{existing['id']}",
