@@ -1,0 +1,48 @@
+name: Publish verified plugin release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - release.json
+      - scripts/public_ads_plugin.py
+      - .github/workflows/plugin-release.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mighty-ads-public-release
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 15
+    steps:
+      # Retries always reconcile current main, so old runs cannot promote old content.
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.14.9'
+      - name: Validate the public tree
+        id: release
+        shell: bash
+        run: |
+          if [[ -f release.json ]]; then
+            python scripts/public_ads_plugin.py validate --root .
+            echo 'present=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'Infrastructure bootstrap: no release selected yet.'
+          fi
+      - name: Reconcile GitHub release and verify assets
+        if: steps.release.outputs.present == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/public_ads_plugin.py publish --root . --commit "$(git rev-parse HEAD)"
