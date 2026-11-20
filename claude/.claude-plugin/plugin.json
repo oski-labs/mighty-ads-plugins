@@ -1,7 +1,7 @@
 {
   "name": "mighty-ads",
-  "version": "0.1.32",
-  "description": "Review and optimize Meta Ads, Google Ads and ChatGPT Ads through focused merchant workflows, and manage supported ad settings in MightyAI.",
+  "version": "0.1.33",
+  "description": "Review and optimize Meta Ads, Google Ads, TikTok Ads, ChatGPT Ads and X Ads through focused merchant workflows, and manage supported ad settings in MightyAI.",
   "author": {
     "name": "MightyAI",
     "url": "https://www.getmighty.ai/"

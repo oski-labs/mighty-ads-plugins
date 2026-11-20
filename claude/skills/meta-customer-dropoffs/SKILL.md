@@ -41,5 +41,6 @@ Lead with the stage that deserves attention, the exact supporting counts/rates,
 and a short why. Give one concrete verification or test before proposing several
 optimizations. Use the creative-health or audience workflow when the evidence
 points there. This analysis changes nothing. Prepare the next action; apply a
-supported Meta change only through the [manage-ads workflow](../manage-ads/SKILL.md)
-after approval, and never claim the site or campaign was changed.
+supported Meta change only through `manage-ads` after approval. Load that skill
+by name from the host's available skills or workflow prompts, not a filesystem
+path to another skill, and never claim the site or campaign was changed.

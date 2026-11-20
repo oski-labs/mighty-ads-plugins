@@ -11,6 +11,18 @@ In Claude Desktop, enable the plugin's `mighty` connector and complete browser
 sign-in. To change its workspace, open Settings → Connectors → mighty, disconnect
 and reconnect, select the intended workspace during sign-in, then start a new chat
 and discover brands again.
+In Gemini CLI, run `/mcp auth mighty` and complete Clerk sign-in. To change the
+workspace, rerun `/mcp auth mighty`, select the intended workspace during consent,
+then start a new chat and discover brands again. This command starts a new OAuth
+authorization flow; changing Gemini's Google/model login does not switch Mighty.
+In Antigravity, open `/plugin`, expand Mighty Ads under Installed, and choose
+Sign in; `/mcp` also manages the `mighty-ads_mighty` server. To change the
+workspace, use Sign out for that server, then Sign in and select the intended
+workspace during Clerk consent. In the App, use Customizations → Installed and
+the plugin's MCP server controls. Start a new chat and discover brands again.
+If the consent flow does not offer the intended workspace, stop and have the
+user resolve the connection in the host rather than reuse the old workspace or
+claim that switching succeeded. Do not delete credential files or request tokens.
 The organization chosen there is the connection's authorization boundary. Discover
 its brands with `list_organization_brands`; never request organization IDs, brand
 IDs, provider keys, tokens or OTPs in chat.
@@ -40,10 +52,10 @@ and read the new brand's data afresh. Do not claim the switch succeeded until th
 brand is resolved from the accessible list. There is no shared active-brand
 setting: switching in one chat must not change another chat's target.
 
-Keep the selected brand when changing advertising channels. ChatGPT, Google and
-Meta each require their own connection for that brand. Check the requested
-channel's readiness and select a provider account when necessary. Never reuse a
-Google or Meta account from the previous brand. For a cross-channel performance
+Keep the selected brand when changing advertising channels. ChatGPT, Google,
+Meta and TikTok each require their own connection for that brand. Check the
+requested channel's readiness and select a provider account when necessary.
+Never reuse a Google, Meta or TikTok account from the previous brand. For a cross-channel performance
 request, check each requested channel separately and report unavailable channels
 explicitly. A request for ChatGPT performance alone does not require extra calls
 to Google or Meta. Connection readiness does not prove a performance report works.
@@ -88,3 +100,21 @@ Direct missing or revoked grants to the existing Meta integration. Meta creation
 and edits also require saved management access: check it with
 `check_meta_ads_creation_readiness` or `get_meta_edit_context` before proposing a
 change. Read access is never elevated by a change request.
+
+For Amazon Ads, use `check_amazon_ads_readiness` to find the selected brand's
+saved connections; each is one advertising profile in one marketplace, so ask
+the user to choose by account name and marketplace if several exist, then reuse
+that connection ID. Profile access does not verify measurement or launch
+readiness, and Amazon tools cover Sponsored Products only. Changes need a
+connection made with management access; a read-only connection is never
+elevated by a change request. Readiness names the date Amazon's yearly consent
+expires when it is near; direct reconnects and revoked grants to the existing
+Amazon Ads integration.
+
+For TikTok Ads, use `check_tiktok_ads_readiness` to find the selected brand's
+saved connections. Ask the user to choose by advertiser account name if several
+exist, then reuse that connection ID. Advertiser access does not verify the
+Pixel, Events or launch readiness. Direct missing or revoked access to the
+existing TikTok integration. TikTok changes require a connection saved with
+management access (`management_permission_granted` in readiness); read access
+is never elevated by a change request.
