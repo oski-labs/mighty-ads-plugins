@@ -3,9 +3,10 @@
 Use these rules for every performance workflow. Load the relevant channel
 reference for provider fields, units, attribution and tool behavior.
 
-Before using provider tools, follow [setup](../setup/SKILL.md) to resolve the
-workspace, brand and account, and [manage ads](../manage-ads/SKILL.md) for shared
-read, write, confirmation and recovery behavior.
+Before using provider tools, load `setup-mighty-ads` by name to resolve the
+workspace, brand and account, and `manage-ads` for shared read, write,
+confirmation and recovery behavior. Discover these through the host's available
+skills or workflow prompts, not filesystem paths to other skills.
 
 - Resolve the exact brand, account, dates and campaign scope before comparing.
 - Compare equal, complete periods. Label today, recent attribution and partial

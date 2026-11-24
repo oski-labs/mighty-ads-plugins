@@ -12,10 +12,11 @@ cannot be elevated by asking; reconnecting with management access is a Console
 step. Readiness also names Reddit's account approval state when it is not
 valid, because an unapproved account blocks delivery even though reads work.
 
-Reddit inventory and performance tools are read-only. Paused campaign and
-ad-group creation, budget edits and pause/activation use the separate guarded
-workflow below; never route Reddit changes through Meta, Google or ChatGPT write
-tools, and never create ads, posts or audiences here.
+Reddit inventory and performance tools are read-only. Quick Campaign, paused
+campaign, ad-group and image-ad creation, budget edits and pause/activation use
+the separate guarded workflow below; never route Reddit changes through Meta,
+Google or ChatGPT write tools. Video and carousel ads and audiences are not
+available here: point to Reddit Ads Manager.
 
 ## Inventory
 
@@ -101,8 +102,31 @@ provider codes.
    Obtain approval of that exact plan before any creation.
 4. Call `create_reddit_campaign`. Then read `get_reddit_campaign` and pass its
    fresh `item.write_state` into `create_reddit_ad_group`. New ad groups have no
-   ads, so they cannot serve; explain that ads and posts are added in Reddit
-   Ads Manager for now.
+   ads, so they cannot serve until the next section adds them.
+
+## Quick campaign and new ads
+
+1. For Quick Campaign, resolve one product with `list_brand_products` and
+   explain that `prepare_reddit_campaign` writes three image-ad variants
+   (headline, body, call to action) from saved brand knowledge and costs 10
+   Mighty credits when billing is enabled; preparing again is another paid
+   generation. It returns the profiles ad posts can be made as; ask which one
+   when there is more than one (`list_reddit_profiles` lists them outside
+   Quick Campaign).
+2. Present one plan: the campaign and ad group from the section above, then
+   each ad with its name, headline, body, call to action, profile, the product
+   image and the destination. Say: "All new items will be paused. Activation
+   requires separate approval." Explain that each ad gets a new Reddit post,
+   which Reddit cannot delete even if the ad is never used.
+3. After approval, create the campaign and ad group as above, then read
+   `get_reddit_ad_group` and call `create_reddit_ad` for each approved ad with
+   its fresh `item.write_state`. Reddit reviews each ad (usually within two
+   business days) before it can run.
+4. If the result says the post exists but the ad was not created, retry with the
+   returned `post_id` instead of the post fields, so no second post is made. If
+   it returns `post_job_id`, Reddit was still making the post: wait a minute,
+   then retry with that `post_job_id` instead of the post fields. If it is
+   `uncertain` without either, list the ad group's ads before any retry.
 
 ## Change budgets and status
 

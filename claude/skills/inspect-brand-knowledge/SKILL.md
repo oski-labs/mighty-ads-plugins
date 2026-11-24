@@ -6,9 +6,11 @@ description: Read and explain a Mighty brand's saved brand knowledge, including 
 # Inspect brand knowledge
 
 Use the selected Mighty connection and the brand selected in this conversation,
-including a selection made by the setup or management skill. Follow
-[the setup skill](../setup/SKILL.md) for connection selection, brand resolution and
-switching. Verify the brand against `list_organization_brands` for this connection.
+including a selection made by the setup or management skill. Load
+`setup-mighty-ads` by name from the host's available skills or workflow prompts
+for connection selection, brand resolution and switching; do not use a filesystem
+path to another skill. Verify the brand against `list_organization_brands` for
+this connection.
 An explicit brand in the current request takes precedence. If that named brand
 is unavailable, do not substitute another brand; follow the setup skill's unavailable-brand handling.
 If no brand is specified, retain the current selection when available; default to
