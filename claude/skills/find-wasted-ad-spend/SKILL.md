@@ -9,8 +9,11 @@ Read [the analysis principles](../references/ads-analysis-principles.md) and
 [response pattern](../references/workflow-response-pattern.md). For each selected
 channel, read only its existing reference: [ChatGPT Ads](../manage-ads/references/chatgpt-ads.md),
 [Google Ads](../manage-ads/references/google-ads.md),
-[Meta Ads](../manage-ads/references/meta-ads.md) or
-[Reddit Ads](../manage-ads/references/reddit-ads.md).
+[Meta Ads](../manage-ads/references/meta-ads.md),
+[Pinterest Ads](../manage-ads/references/pinterest-ads.md),
+[Reddit Ads](../manage-ads/references/reddit-ads.md),
+[Snapchat Ads](../manage-ads/references/snapchat-ads.md) or
+[TikTok Ads](../manage-ads/references/tiktok-ads.md).
 
 Resolve the exact brand, channels, dates and economic goal. Use the merchant's
 CPA, ROAS or other objective-specific target when available. Without a target,
@@ -39,13 +42,24 @@ Use channel-specific evidence: Google search-term and keyword questions may rout
 to the Google optimizer; Meta fatigue or audience findings may route to the
 corresponding Meta workflow; ChatGPT Ads may use its account or campaign spend
 opportunity tool; Reddit Ads may break spend down by community, interest, keyword
-or placement through its performance tool. Do not blend unlike conversion
-definitions into one ranking.
+or placement through its performance tool; Snapchat Ads may compare campaigns,
+ad groups or ads by day through its performance tool; Pinterest Ads may compare
+campaigns, ad groups or ads by UTC day through its performance tool, following
+[its channel reference](../manage-ads/references/pinterest-ads.md). Do not blend
+unlike conversion definitions into one ranking.
+
+For Google PMax, use campaign/channel reports for spend and group/asset reports
+for creative evidence. Never infer placement spend from impressions or sum asset
+metrics into totals. PMax changes remain recommendations; no PMax writer exists.
 
 Lead with the largest actionable opportunity, then show at most three prioritized
 actions with the amount affected and a short why. Include a compact **Do not cut**
 note when it protects an item that superficially looks weak. Offer numbered next
-steps. Execute only supported, explicitly confirmed Google, ChatGPT or Reddit Ads
-changes; Reddit changes are limited to budgets and pause or activation through its
-guarded workflow. Meta recommendations remain prepared actions until Meta write
+steps. Execute only supported, explicitly confirmed Google, ChatGPT, Reddit,
+TikTok, Snapchat or Pinterest Ads changes through their guarded workflows. Reddit
+and TikTok changes are limited to budgets and pause or activation; Snapchat changes
+to names, budgets, bids, schedules and pause or activation; Pinterest changes to
+names, spend caps, budgets, bids, schedules and pause or activation, each
+approved on its own. Meta recommendations
+remain prepared actions until Meta write
 tools exist.

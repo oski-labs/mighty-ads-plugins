@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "release": "0.1.34",
+  "clients": {
+    "codex": {
+      "status": "supported",
+      "configuration": "versioned_plugin",
+      "acceptance": "required"
+    },
+    "chatgpt": {
+      "status": "candidate",
+      "configuration": "production_mcp_oauth",
+      "acceptance": "required_before_promotion"
+    },
+    "gemini": {
+      "status": "candidate",
+      "configuration": "versioned_extension",
+      "acceptance": "required_before_promotion"
+    },
+    "antigravity": {
+      "status": "candidate",
+      "configuration": "versioned_plugin",
+      "acceptance": "required_before_promotion"
+    },
+    "muse_code": {
+      "status": "candidate",
+      "configuration": "versioned_plugin",
+      "acceptance": "required_before_promotion"
+    },
+    "muse_connector": {
+      "status": "candidate",
+      "configuration": "production_mcp_oauth",
+      "acceptance": "required_before_promotion"
+    },
+    "console_mighty_agent": {
+      "status": "diagnostic",
+      "configuration": "agents_api",
+      "acceptance": "not_sufficient"
+    },
+    "go_cli": {
+      "status": "oauth_utility",
+      "configuration": "registered_public_client",
+      "acceptance": "not_conversational"
+    },
+    "other_mcp_hosts": {
+      "status": "protocol_compatible",
+      "configuration": "cimd_or_registered_public_client",
+      "acceptance": "required_before_promotion"
+    }
+  }
+}

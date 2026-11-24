@@ -1,6 +1,6 @@
 ---
 name: manage-ads
-description: Inspect Meta Ads, Google Ads, Reddit Ads and ChatGPT Ads through MightyAI, research Google Search keywords and forecasts, find products, create paused Meta photo, Google Search and ChatGPT campaigns and ads, and manage supported Meta, Google and ChatGPT settings. Meta supports reads, paused photo creation, guarded settings edits and explicit pause/activation. Reddit Ads supports reads, paused campaign and ad-group creation, budget edits and pause/activation.
+description: Review or manage Meta Ads, Google Ads, Reddit Ads, TikTok Ads, Amazon Ads, Snapchat Ads, X Ads, Microsoft Advertising, Pinterest Ads and ChatGPT Ads through MightyAI. Use when a merchant asks to inspect accounts, campaigns or performance, research Google Search keywords and forecasts, find products, prepare supported paused campaigns and ads, or change supported budgets, bids, targeting, copy or delivery status. Capabilities vary by channel; consult its reference. Writes require management access and explicit approval; new campaigns are created paused.
 ---
 
 # Manage ads
@@ -20,13 +20,29 @@ credentials, or carry provider-account selections or write approval across brand
 For ChatGPT Ads, read [its channel reference](references/chatgpt-ads.md).
 For Google Ads, read [its channel reference](references/google-ads.md).
 For Reddit Ads, read [its channel reference](references/reddit-ads.md). Use its read tools
-for inventory and performance, and its editing context, creation, budget and status tools for separately approved changes; ads are not created here.
+for inventory and performance, and its editing context, creation (campaigns, ad groups and image ads with new posts), budget and status tools for separately approved changes.
+For X Ads, read [its channel reference](references/x-ads.md); its guarded creation and change tools need a manage connection.
+
+For Amazon Ads, read [its channel reference](references/amazon-ads.md); it covers Sponsored Products reads, reports, paused campaign and ad group creation, daily budgets and pause/enable on management connections.
+
+For Microsoft Advertising, read [its channel reference](references/microsoft-ads.md); it covers readiness, inventory, report-based performance and search terms, and its editing context, paused Search creation, change and status tools for separately approved changes on management connections.
+For Pinterest Ads, read [its channel reference](references/pinterest-ads.md). Use its read tools
+for readiness, inventory and UTC-day performance, and its editing context, creation, update and status tools for separately approved changes; ads are not created here.
+For Snapchat Ads, read [its channel reference](references/snapchat-ads.md). Use its read tools
+for inventory and performance, and its editing context, creation (campaigns, ad groups and image ads), update and status tools for separately approved changes. Snapchat Quick Campaign uses `prepare_snapchat_campaign`.
 For Meta Ads, read [its channel reference](references/meta-ads.md). Use its read tools
-for inventory and performance, and its separate photo-creation tools after approval.
+for inventory and performance. After approval, use the paused photo or the
+Advantage+ Website Sales workflow for the selected campaign and format.
+For a request to make an Advantage+ campaign for a product, use the Advantage+
+Quick Campaign in that reference. Use the image from the resolved product.
 Use its editing context and edit/status tools for separately approved changes; creative replacement is unavailable.
-Never apply Google or ChatGPT write tools to Meta requests.
+Never apply one channel's write tools to another channel's requests.
+For TikTok Ads, read [its channel reference](references/tiktok-ads.md). TikTok
+supports reads, paused campaign, ad group and Spark Ad creation, budget changes
+and enable/disable on management connections; never apply another channel's write tools to a TikTok request.
 Use the channel the user names; ask if ambiguous rather than silently switching.
-Google creation and changes support Search only. Use the selected channel’s tools.
+Google supports Search writes and separate paused-only PMax creation and
+management. PMax activation is unavailable. Use the selected channel’s tools.
 Use live provider reads, not remembered data or published draft workspaces.
 Read-only requests require no change confirmation.
 
@@ -46,7 +62,8 @@ goal; do not invent bestseller claims. Let the user choose before creating ads.
 Flag unknown availability or shipping checks rather than claiming readiness.
 
 Before drafting ordinary ad copy yourself, read `get_brand_context` for the latest
-saved guidance. Quick Campaign uses `prepare_chatgpt_campaign` or `prepare_meta_campaign` for the
+saved guidance. Quick Campaign uses `prepare_chatgpt_campaign`, `prepare_meta_campaign`,
+`prepare_x_campaign`, `prepare_reddit_campaign` or `prepare_snapchat_campaign` for the
 selected channel; each reads that
 same current context and returns generated copy; do not make a duplicate context
 read. Use the returned voice, audience and restrictions.

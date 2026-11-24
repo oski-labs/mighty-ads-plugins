@@ -38,5 +38,6 @@ Return the few dimensions that materially change the decision, with spend,
 results and a short why. Propose a prioritized audience/placement test plan and
 name what should remain unchanged. This analysis changes nothing: offer a prepared
 change and measurement plan. Apply supported country, age or feed-placement edits
-only through the [manage-ads workflow](../manage-ads/SKILL.md) after approval;
+only through `manage-ads` after approval; load that skill by name from the host's
+available skills or workflow prompts, not a filesystem path to another skill;
 never claim targeting was updated unless that workflow confirms it.

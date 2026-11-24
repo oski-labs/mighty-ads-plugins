@@ -33,6 +33,16 @@ is not proof that an ad delivered. Check dated impressions/spend and schedules.
 Creative details cover configured copy/media/destinations; dynamic assets do not
 establish the exact variation shown on each impression.
 
+When visual creative review helps the answer, use the selected ad's returned
+`assets` references and call `get_asset` with the required `asset_id` and selected
+brand. Keep each image or video connected to its ad, media role and carousel
+position. Fetch only the assets needed for the question. Image results include
+a preview; video and other file results can include a temporary download link.
+Request the same asset again when that link expires. Asset IDs resolve to the
+latest observed content, not a snapshot of an older answer. If media is missing
+or unavailable, preserve the performance analysis and say the visual could not
+be retrieved; do not substitute a different creative or download an arbitrary URL.
+
 ## Spend, results and drop-off
 
 Use `get_meta_performance` with explicit account-local `start_date` and
@@ -117,10 +127,51 @@ For sudden drops: compare objective-appropriate KPIs and placement/device/audien
 mix, then use `list_meta_account_activity` with timezone-aware timestamps to inspect
 available edits/delivery events. Activity does not establish causation.
 
-Campaign details include `advantage_state_info`; ad sets include learning status;
-ad details include tracking/conversion configuration. These are configuration and
-provider diagnostics, not a verified Pixel/CAPI health test. Use
-`get_meta_account_diagnostics` for `recommendations` or `reporting_features`.
+### Advantage+ inspection
+
+Use `get_meta_campaign` for the overall Advantage+ state and its individual
+budget, audience and placement states. A campaign can use some automation with
+its overall state disabled. Treat missing or unfamiliar states as unknown.
+Use `get_meta_ad_set` for audience automation, targeting controls, destination,
+optimization and attribution. Read `adset_targeting_rules` for audience controls,
+suggestions under Advantage+ audience, configured and effective placements, and
+placement exclusions. A suggested age range can coexist with a required minimum
+age. Check `adset_optimization`, `learning_stage_info` and `issues_info` for the
+configured optimization and any issues Meta reports. Check `adset_budget_controls` for reported spend
+caps, minimum spend targets and the raw minimum ROAS bid constraint. Spend
+controls use Meta's configured currency units. Treat omitted controls as unknown.
+Use `get_meta_ad` for creative enhancement enrollments. Opt-in indicates
+configured eligibility for a feature. Use `level=ad` and
+`breakdown=creative_automation_asset_id` for impressions and spend by the
+asset IDs Meta reports. Use dated Insights to describe observed delivery.
+
+Use separate total and `platform_placement` reports from `get_meta_performance` for the
+same campaign and dates. Keep present-day automation settings separate from
+historical results. When Meta exposes catalog or product-set references, identify
+the scope that returned them. Use the `product_id` breakdown for product rows
+when available. An empty product breakdown means Meta returned no product rows.
+
+For conversion questions, compare ad-set optimization and destination with the
+reported result event. Use a separate `get_meta_performance` request with
+`level=campaign` and `breakdown=conversion_destination` for destination tags
+on reported actions. Meta can omit a tag or return a numeric code. Preserve
+codes as returned and treat missing tags as unknown. Use a separate unsegmented
+report for spend, cost per lead, and other campaign totals.
+Use purchase cost or ROAS for Sales. For Leads,
+`lead_results` surfaces website and on-Meta events and their exact
+provider-reported cost per lead for default attribution. If explicit
+attribution windows are requested, read the matching event in `actions` and
+`cost_per_action_type` and use their returned window values. Refer to an on-Meta event as a
+form lead when the relevant ad-set destination confirms `ON_AD`. Keep the
+generic `lead` event separate because it can overlap with source-specific counts.
+
+Use ad-set learning status and ad tracking configuration as context for
+measurement questions. Use `get_meta_account_diagnostics` with `custom_audiences`
+to look up names and status for audience IDs referenced by targeting. Use
+`publisher_block_lists` to inspect account-level lists and reported auto-blocking.
+Account-level lists can coexist with Advantage+ placements. Use `next_cursor`
+to complete either inventory when needed. For other account diagnostics, use
+`recommendations` or `reporting_features`.
 Recommendations are Meta's suggestions, not guaranteed lift; never apply them.
 Nested `paging.has_more=true` means recommendation content is partial. Feature
 status is read-only; never enable a feature automatically or promise historical data.
@@ -136,7 +187,13 @@ individual user journeys; do not relabel a playback curve as a different retenti
 
 ## Larger reports
 
-For more than 31 days, or when synchronous reporting is too large, use
+`creative_automation_asset_id` and `conversion_destination` are available only
+through `get_meta_performance`. For longer ranges, split the dates into
+nonoverlapping account-local windows of up to 31 days and page through each
+window. Keep the dates, attribution, and action types explicit.
+
+For other supported breakdowns and unsegmented reporting over 31 days, or when
+the synchronous request is too large, use
 `get_meta_report` with a `report` object specifying dates, level,
 filters, metric group, breakdown, attribution windows, granularity and page size.
 The maximum window is 366 days. This creates a report job only and cannot change ads.
@@ -152,9 +209,9 @@ to change. Never silently compare different windows or sum daily reach.
 ## Boundaries and recovery
 
 Meta inventory and report-result reads are read-only. Starting an asynchronous
-report creates a reporting job and is a non-read-only operation; it never changes ads. The photo-creation workflow below
-creates paused objects. Editing and activation use the separate guarded workflow below. Do not route Meta changes
-through Google/ChatGPT write tools. Account readiness verifies access only, not Pixel/CAPI health,
+report creates a reporting job. Meta creation workflows create paused objects.
+Use the guarded editing workflow for changes to existing campaigns and ads.
+Account readiness verifies access. Check Pixel/CAPI health,
 launch readiness or observed purchases. If event evidence is insufficient, say
 so and recommend an authorized Events Manager/store verification. Reuse existing
 tracking before proposing another integration; gateway setup and experiments are
@@ -227,6 +284,79 @@ or readback mismatch. Read the exact returned object or bounded account inventor
 before deciding recovery; do not silently create a replacement. No automatic
 cleanup/deletion is authorized. Report confirmed objects and incomplete steps
 separately. A paused ad can enter Meta review; review does not mean it is delivering.
+
+## Create paused Advantage+ Website Sales ads
+
+Use a selected Meta connection with verified management access. Resolve the
+Page, optional Instagram identity, website Purchase pixel, and account-owned
+images through `list_meta_creation_assets`. Review the campaign-level budget
+and period, countries, account-local schedule, identity, purchase event, media,
+copy, links, and enhancement choices. Ask for explicit approval before any
+upload or creation. Each successful write or upload costs one Mighty credit.
+
+### Quick Campaign for one product
+
+1. For a request like “Make an Advantage+ campaign for this product,” use
+   `list_brand_products` to resolve the exact product from the brand's catalog,
+   Shopify, or its verified website. If several products match, ask the user
+   to choose. If lookup finds no usable product, ask for the exact product
+   page URL on the brand's verified website and try that URL. Use the resolved
+   image and destination. If the lookup still cannot resolve an available
+   product with an image and destination, offer the manual flow using the
+   merchant's supplied creative and landing page. For a creation request,
+   check management access and the available Page and Purchase pixel before
+   generating paid copy so you can surface setup blockers.
+2. Use `prepare_meta_campaign` with the selected connection, exact product
+   destination URL, and the user's stated goal. Explain that generation costs
+   10 Mighty credits when billing is enabled. It uses saved brand knowledge
+   and returns four photo ad variants with a product image and destination.
+   Show the image and copy in chat, and let the user choose or edit the variants.
+   For a proposal-only request, stop after presenting the proposal.
+3. For creation, collect only missing settings and show one plan with the
+   selected ads, image, destination, Page, Purchase pixel, budget, geography,
+   schedule, and enhancement choices. Explain that the campaign, ad set, and
+   ads will all be paused. Get one approval for the exact plan, including any
+   image upload. If a later preview or setting differs, confirm the specific
+   change before continuing.
+
+### Create the approved plan
+
+For image variants, reuse an approved image hash from the selected account or
+call `upload_meta_ad_image` with the approved HTTPS image URL. Verify the result
+and use the same account-owned hash for all variants that use that image.
+
+1. Use `create_meta_campaign` with `OUTCOME_SALES` and a daily or lifetime
+   campaign budget. Read the saved campaign and its `item.write_state`.
+2. Use `create_meta_ad_set` with `mode: advantage_plus_website_sales`.
+   Supply the Purchase pixel and countries. Leave ad-set budget and manual
+   placements empty. Read the campaign and ad set again. Proceed when both
+   are paused and Meta reports Advantage+ Sales with budget, audience, and
+   placement automation enabled.
+3. Use `create_meta_website_creative` for an image, a video with an
+   account-owned thumbnail, or a carousel of two to five ordered image cards.
+   For video, use a video from an existing ad in the same account or upload
+   an approved public MP4 up to 10 MB with `upload_meta_ad_video`. For a new
+   video, keep its ID and `asset_state` and reuse them after processing.
+   For a larger file, use a ready video from an existing ad in that account.
+4. Show the saved enhancement settings and `get_meta_ad_preview` for a
+   supported placement. If creative confirmation is pending, use the saved
+   creative ID and `approved_creative` to reverify it through
+   `get_meta_ad_preview`. If enrollment differs, show the saved choices and
+   use `approved_saved_enhancements` only after the user accepts those choices.
+   Pass a verified `asset_state` to the ad tool. Recover the saved creative
+   before considering a replacement.
+5. Use `create_meta_ad` with the two fresh parent `item.write_state` values
+   and the creative's `asset_state` as `expected_creative_state`. Read back
+   the saved statuses and creative, then report the names and paused status.
+   Include IDs when requested or needed for recovery. Keep known IDs when
+   confirmation is pending and reconcile uncertain operations before any new
+   request.
+
+Use the guarded edits below for approved name changes and changes to the
+existing campaign budget amount. To pause a specific object, pass
+`pause_state` from `get_meta_edit_context` as `expected_state`. Keep this
+creation workflow paused. Existing campaigns use the separate editing and
+delivery workflow below.
 
 ## Edit existing Meta settings
 

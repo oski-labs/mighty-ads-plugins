@@ -2,6 +2,7 @@
 
 Answer Google Ads inspections without change approval. Search creation, supported
 budget/bid changes, supported edits and enable/pause requests follow the confirmed plan below.
+Performance Max has separate paused-only creation and management tools below.
 Other campaign types and unsupported edits remain inspection-only. Never
 substitute ChatGPT tools or imply an unconfirmed change was made.
 
@@ -45,6 +46,19 @@ account's timezone and state the actual dates. Tools require `start_date` and
 `end_date_exclusive` on every page; include the day after the user's last inclusive
 date. Do not invent the timezone. Ask for dates if the intended period is unclear.
 
+For `list_google_performance`, choose exactly one of `level` or `breakdown`:
+
+- Use `level=campaign` for campaign totals, or `level=ad_group` or `level=ad`
+  for those aggregates. Omit `breakdown`.
+- Use `breakdown=keyword` for positive keyword performance, or the supported
+  `conversion_action`, `device`, `location` or `landing_page` breakdown. Omit
+  `level`; breakdown reports allow a campaign filter, not ad-group or ad filters.
+
+Never omit both selectors or send both. Keep the selector, dates and filters
+unchanged on every page. A selector validation error is an invalid request, not
+evidence of a disconnected Google account or zero activity; correct the request
+before interpreting the report.
+
 Convert cost, budget and CPC micros by dividing by 1,000,000; show the account
 currency. Convert CTR ratios to percentages. Conversion value is already in
 currency, not micros; keep fractional conversions. Show budget period and whether
@@ -80,6 +94,269 @@ Google Ads in the selected brand's Integrations; quota/temporary outage → try
 later, not reconnect. Missing targets → refresh the campaign/group selection.
 Never switch brands to bypass an error, expose credentials, or claim a failed
 read means no campaigns or no spend. Finish with one useful next step.
+
+## Create paused Performance Max campaigns
+
+1. Resolve the exact brand and Google account. Readiness establishes account read
+   access, currency and timezone; it does not establish write access or healthy
+   conversion tracking.
+2. Use `prepare_google_pmax_campaign` for a grounded one-product copy and image
+   draft using catalog evidence and saved brand knowledge. This costs 10 credits
+   when billing is enabled. The draft requests white padding for product images
+   in landscape/square roles without cropping; creation validates and prepares
+   the media. Review claims and imagery. Collect a
+   real business name and approved logo assets; never invent a logo. The result
+   explicitly remains `ready_for_creation=false` until missing inputs are reviewed.
+3. Confirm one exact creation plan: account/currency, campaign/group names, daily
+   budget, Maximize Conversions or Maximize Conversion Value and optional CPA/ROAS
+   target, inheritance of existing account conversion goals, countries/languages,
+   dates, political declaration, final URLs and URL/text automation. Do not infer
+   financial decisions from a product price or proposal. Standard campaigns need
+   complete copy, landscape/square imagery and campaign brand assets. Retail also
+   needs verified Merchant Center/feed settings and explicit item IDs or an
+   explicit all-products scope; choose feed-only or complete custom creative.
+4. After approval, call `create_google_pmax_campaign` with the complete typed
+   request. It validates the graph, creates a PAUSED campaign and PAUSED asset
+   group atomically, then reads back returned resources. Creation costs one credit
+   only on a verified result. There is no activation input.
+5. Report the verified IDs/statuses. A rejected validation creates nothing;
+   `uncertain` or `confirmation_pending` needs read-only inspection using any
+   returned IDs. Never automatically retry an uncertain creation.
+
+Existing image asset IDs are reused unchanged. `fit=true` applies only to new
+image URLs, requires review of the proposed use, and preserves the full image.
+Neither preparation nor paused creation authorizes later activation. These tools
+are explicitly unavailable for simulated demo brands.
+
+## Manage paused Performance Max drafts
+
+Use `get_google_pmax_edit_context` immediately before planning one change. It
+returns the saved account and fresh state tokens; show the exact before/after
+values and obtain approval. These operations require a PAUSED campaign, and group
+edits also require a PAUSED asset group. They never activate or remove anything.
+
+| Change | Tool | Required state token |
+| --- | --- | --- |
+| Campaign name, daily budget, bidding/CPA/ROAS target, tracking template/suffix or URL/text automation | `update_google_pmax_campaign` | `campaign_states[change.operation]` as `expected_campaign_state` |
+| Complete new paused asset group with assets and optional retail product partition | `create_google_pmax_asset_group` | `campaign_state` as `expected_campaign_state` |
+| Existing group's name, complete final URL list and optional full custom creative replacement | `update_google_pmax_asset_group` | `campaign_state` and `asset_group_state` as the corresponding expected fields |
+
+Send the exact account from the context. A stale token requires another read and
+review of the changed plan, never a blind retry. Financial values must be explicit.
+Review the campaign brand assets returned by the context. Group creation reuses
+these existing assets; it cannot
+change the campaign's Merchant Center identity. For existing-group edits, omit `creative` to preserve attachments or provide the
+complete desired creative to replace them atomically; review every text/image/video
+role. The group state token includes its current attachments. Listing groups and
+audiences cannot be edited. Other settings and activation remain outside
+this write surface. Context reads are free; verified writes cost one credit, as do
+verified unchanged update results. Rejected or unconfirmed writes are not success.
+
+## Performance Max inspection
+
+Discover `channel_type=PERFORMANCE_MAX` in `list_google_campaigns`, then use
+asset groups instead of Search ad groups. Use the native PMax tools for supported
+paused-only writes; activation is unavailable. Never route PMax requests through
+a Search writer.
+
+| Question | Tool |
+| --- | --- |
+| PMax bidding, merchant feed, budget and automation | `get_google_pmax_campaign` |
+| Group URLs, configured/serving status and strength | `list_google_pmax_asset_groups` |
+| Attached copy, images, YouTube assets, role and policy | `list_google_pmax_assets` |
+| Signals, listing partitions, coverage, top combinations or generated URL assets | `list_google_pmax_configuration` with the corresponding `kind` |
+| Spend, conversions and value | `list_google_pmax_performance` with `report=campaign` |
+| Spend by Google network | `list_google_pmax_performance` with `report=channel` |
+| Product/video usage by network | `list_google_pmax_performance` with `report=channel_usage` |
+| Creative evidence | `list_google_pmax_performance` with `report=asset_group`, `asset` or `asset_channel` |
+| Retail performance | `list_google_pmax_performance` with `report=product` or `product_group` |
+| Group spend by network | `list_google_pmax_performance` with `report=asset_group_channel` |
+| Product attributes, network or device | `list_google_pmax_performance` with `report=product_attributes`, `product_channel` or `product_device` |
+| Sold products and attributed product profit | `list_google_pmax_performance` with `report=sold_product` |
+| Shopping auction competition | `list_google_pmax_performance` with `report=shopping_competitive` |
+| Linked feeds, sets, members and labels | `list_google_pmax_configuration` with `kind=asset_sets`, `asset_set_assets`, `page_feed_assets` or `campaign_labels` |
+| Inherited account assets and sets | `list_google_pmax_configuration` with `kind=customer_assets` or `customer_asset_sets` |
+| Existing simulations, experiments and adjustments | `list_google_pmax_configuration` with `kind=simulations`, `experiment_arms`, `seasonality_adjustments` or `data_exclusions` |
+| Account recommendations and auto-apply settings | `list_google_pmax_configuration` with `kind=account_recommendations` or `recommendation_subscriptions` |
+| Search evidence | `list_google_pmax_performance` with `report=search_term` or campaign-scoped `search_category` |
+| Placement impressions | `list_google_pmax_performance` with `report=placement` |
+| Device, conversion-action, targeted-location or destination evidence | `list_google_pmax_performance` with `report=device`, `conversion_action`, `location` or `landing_page` |
+
+Use explicit complete account-local dates, at most 366 days for totals or 31 for
+`granularity=daily`. Hourly campaign-resource reports cover at most seven days;
+`day_of_week`, `weekly` and `monthly` are named calendar buckets. Placement reports
+support total/daily only, and targeted-location reports exclude day-of-week.
+Week/month buckets can be partial at the selected window boundaries.
+Default to seven complete days. If the returned metrics are
+zero, state zero for that interval and offer a longer interval; never silently
+replace dates with a year. Follow pagination with unchanged filters. Inventory
+excludes removed attachments/groups; historical reports include removed entities.
+An empty list is not proof that the requested campaign/group exists.
+
+For creative questions, combine attachment content/role and policy with group and
+asset performance. Count unique asset identities separately from attachments.
+Reused assets and product partitions overlap: never sum their metrics into campaign
+totals. Ad strength/coverage is diagnostic, not causal evidence of sales. Top
+combinations have no combination-level spend or ROAS. Signals guide automation;
+they do not enforce audience targeting or describe actual delivered audiences.
+
+Use campaign/channel reports for channel spend. Preserve Google's network names,
+including unknown future enum values. Placements have impressions only: do not
+infer spend or conversions. Conversion-action reports have conversions/value only.
+Search terms/categories are privacy-filtered evidence, not a complete search log;
+Search keywords and PMax search themes are different. Keep targeted-location
+performance separate from the existing country presence/interest breakdown.
+Images/YouTube URLs are provider metadata; use authorized asset retrieval for media
+and never assume a URL has already been rendered or grants arbitrary fetch access.
+
+### Choose a reporting profile
+
+Use `metric_set=all_conversions` for all conversions/value, `conversion_detail`
+for compatible view-through/cross-device totals, `conversion_date` for conversion
+occurrence dates, `engagement` for interactions and `video` for video views and
+quartiles. Campaign totals also expose watch time; network video rows omit watch
+time. These are fixed compatible profiles, not arbitrary field selectors.
+Product/video usage reports accept standard metrics only. Detailed search-term
+rows accept standard/engagement metrics; use `report=search_term` for compatible
+all-conversion totals.
+
+`report=product_attributes` returns categories, product types, custom labels,
+country and condition. `shopping_competitive` reports eligible Shopping auction
+shares without product segmentation; these are not all-channel PMax shares.
+`product_group_brand`, `product_group_category`, `product_group_type`,
+`product_group_condition`, `product_group_channel` and
+`product_group_custom_attribute` select one partition dimension each. They are
+partial views of overlapping partition rows; use `kind=listing_filters` for the
+whole configured tree. `sold_product` distinguishes advertised products from
+products sold and exposes cart outcomes without invented click/spend values.
+
+`search_term_detail` adds network/device/match-source/targeting-status;
+`user_location` describes user geography, distinct from targeted locations.
+`expanded_landing_page` describes expanded destinations; the compatible
+`landing_page_quality` metric profile returns Google's page diagnostics.
+`mobile_platform`, `new_vs_returning`, `conversion_source`, `conversion_lag` and
+`click_type` provide campaign breakdowns. Customer status, conversion source and
+lag expose conversion outcomes without spend/impressions; mobile platform omits
+impressions. These conversion/platform views accept total/daily and
+standard/all-conversion metrics only. Unsupported profile combinations fail
+with a selection error; do not silently substitute different data or dates.
+
+Conversion-date outcomes and interaction-date spend describe different cohorts.
+Do not compute same-cohort ROAS from them without aligning attribution.
+
+### Linked and inherited configuration
+
+Discover `kind=asset_sets`, then pass the selected `asset_set_id` to
+`asset_set_assets` or `page_feed_assets`. The set must belong to the selected
+campaign; page-feed reads additionally require PAGE_FEED type. Retained removed
+links establish historical association, not active usage. These views and account
+context reject `asset_group_id`. Feed URLs/labels are configuration inputs, not
+served-URL evidence or permission to crawl pages.
+
+Account assets/sets, account recommendations, subscriptions and bid adjustments
+are account context. Inspect their explicit campaign, channel and device scopes
+before attributing them to the PMax campaign. Simulations are predictions;
+experiments are existing metadata. No recommendation is generated/applied and no
+experiment or adjustment is created. Filtered experiment/recommendation pages
+can be empty while `next_cursor` remains.
+
+Use the existing `list_google_campaign_criteria` for richer campaign exclusions,
+`view=customer_negatives` for inherited account exclusions, `view=shared_sets`
+for reusable lists (optionally campaign-filtered), and `view=shared_set_criteria`
+with `shared_set_id` for members and brand definitions. Keep each collection's
+pagination separate and retain provider status/type/unknown values.
+
+Resolve returned location, language or product-category IDs with
+`view=reference_definitions`, `reference_type=location`, `language` or
+`product_category`, and 1–100 unique numeric-string `reference_ids`. Omit campaign
+and shared-list IDs on this view. These are global definitions, not proof of
+campaign targeting or eligibility. Product names are localized values in
+`data.localizations`; retain language/region rather than inventing one display
+name. The lookup does not traverse parent references or other customer accounts.
+
+Use `list_google_conversion_settings` for measurement context: `goal_config`
+and `lifecycle_config` require a campaign; `custom_goals`, `lifecycle_goals`,
+`customer_types`, `value_rules`, `value_rule_sets`, `tracking`, `upload_client`,
+`upload_actions` and `custom_variables` are account context and omit campaign ID.
+Cross-account conversion owners remain unresolved resource references; never
+switch accounts to follow them. Settings, upload summaries and zero sales do not
+prove healthy instrumentation. Audience user-list rules and taxonomy definitions
+contain no individual uploaded customer members.
+
+### Product eligibility, audiences and recommendations
+
+Use `list_google_pmax_configuration` with `kind=product_eligibility` for the
+selected campaign's current included products, status, prices and issues. These
+issues can lag up to 24 hours. This is not historical feed inventory or a complete
+Merchant Center audit; a product absent from this campaign may still exist in the
+merchant's catalog. Eligibility is campaign-level, without an asset-group filter.
+
+Use `kind=audiences` for definitions referenced by this PMax campaign's audience
+signals, optionally within one asset group. This expands inclusion/exclusion
+composition plus linked user-list, custom-audience, combined-audience and interest
+metadata. It does not retrieve uploaded customer-list members. Custom audience
+members are configured keywords, URLs or apps, not individual customers.
+Preserve unresolved references as unknown. Combined-audience composition is not
+exposed by v25; its name/status metadata may be all that is available. Definitions
+remain automation guidance, not proof of observed delivery or audience restrictions.
+
+Use `kind=recommendations` for existing campaign-linked or verified asset-group
+recommendations and `kind=budget_recommendations` separately for its budget.
+Preserve any multi-campaign association in the returned payload. Shared-budget
+recommendations may affect other campaigns; predicted impact is
+not observed performance and is not wholly attributable to this PMax campaign.
+No recommendation is generated, applied or dismissed. An empty filtered page can
+have `next_cursor`; continue it before concluding there are no recommendations.
+
+### Cart and profit reporting
+
+For `list_google_pmax_performance` with `report=campaign`, `product` or `product_group`,
+select `metric_set=cart` for primary conversion cart metrics or `cart_all` to
+also read the separate all-conversion cart metrics. `standard` remains the default.
+The response separates `cart_metrics` and `all_cart_metrics`: never add them
+together. Orders and units can be fractional; monetary fields ending `_micros`
+are micros, including revenue and gross profit here. Conversion value remains
+account currency. Margins and average cart size are non-additive.
+
+Cart sales metrics require conversions with cart data. Profit/COGS metrics also
+require product cost-of-goods inputs.
+Returned zero does not establish that instrumentation is configured; omitted
+fields remain null. Explain missing measurement only when it affects the answer.
+Google's attributed product gross profit is not the merchant's net business profit.
+Product partition overlap still prevents summing rows into campaign totals.
+
+### Category drilldown and change history
+
+Read `report=search_category` for a campaign's categories and estimated search
+volume ranges. Then use `report=search_category_term` with that campaign and one
+returned `category_id`, including category zero when returned, for deeper term
+insights over at most 31 complete days with total granularity. These insights have
+no spend metric. Google privacy and data availability can leave term drilldown
+empty while the parent category has metrics. Use `report=search_term` for separate
+observed term/spend evidence; do not invent category membership for those rows.
+Google retired meaningful search subcategory values in March 2025. v25 still
+requires the empty companion field with insight terms; never present it as a
+working subcategory hierarchy.
+
+Use `list_google_pmax_changes` for change evidence within explicit account-local
+`[start_date,end_date_exclusive)` dates. `view=events` supplies supported old/new
+field values within 30-day retention; `view=status` supplies each resource's latest
+change within 90 days. The date interface conservatively admits the last 29/89
+completed days plus today within those rolling limits. Include today only when
+requested and label it incomplete. Neither view is a complete Google UI audit log.
+
+Default `association=campaign` covers directly attributed records. Use
+`association=budget` for its verified budget, `asset` with a verified `asset_id`,
+or `asset_group` with a verified `asset_group_id`. Shared asset/budget evidence can
+involve other campaigns. Asset-group event details are absent from v25; use status.
+Each query has Google's 10,000-row cap. If `provider_limit_reached=true`, narrow
+dates and read again, including when a filtered final page is empty. Never describe
+that bounded result as an unlimited history export. Budget event pages can be
+empty with a continuation; keep paging the filtered scan. Change status is not an
+ordered log of every edit and has no old/new field values.
+
+Simulated demo brands return explicit PMax unavailability rather than making live
+provider requests. Do not imply all Google dashboard insights are available.
 
 ## Keyword research
 

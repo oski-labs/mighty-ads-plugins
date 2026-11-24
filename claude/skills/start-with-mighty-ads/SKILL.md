@@ -8,12 +8,15 @@ description: Show a connection-aware Mighty Ads starting menu when a merchant as
 Read [the response pattern](../references/workflow-response-pattern.md). This is a
 short router, not an account audit.
 
-Resolve the requested or selected brand with `list_organization_brands`, following
-[the setup skill's](../setup/SKILL.md) brand and workspace boundaries. After
-resolving one brand, run lightweight `check_google_ads_readiness`,
-`check_meta_ads_readiness`, `check_chatgpt_ads_readiness` and
-`check_reddit_ads_readiness` checks. These reads need no confirmation and may
-run in parallel. A failed check means availability
+Load `setup-mighty-ads` by name from the host's available skills or workflow
+prompts, not a filesystem path to another skill. Resolve the requested or selected
+brand with `list_organization_brands`, following that skill's brand and workspace
+boundaries. After resolving one brand, run lightweight `check_google_ads_readiness`,
+`check_meta_ads_readiness`, `check_chatgpt_ads_readiness`,
+`check_reddit_ads_readiness`, `check_tiktok_ads_readiness`,
+`check_snapchat_ads_readiness`, `check_pinterest_ads_readiness` and
+`check_x_ads_readiness` checks. These reads
+need no confirmation and may run in parallel. A failed check means availability
 is unknown unless its message explicitly says that channel must be connected;
 that is a confirmed unavailable channel. For ChatGPT Ads, working advertiser
 reads can support read workflows even when launch measurement is incomplete;
@@ -37,6 +40,20 @@ Show two compact numbered sections using only choices relevant to this brand:
 - Reddit: review campaigns, ad groups, ads and performance by day or by
   community, placement or geography; with a manage connection, create paused
   campaigns and ad groups, change budgets, or pause and activate.
+- Snapchat: review campaigns, ad groups, ads and performance by day; with a
+  manage connection, prepare a Quick Campaign, create paused campaigns, ad
+  groups and image ads, change names, budgets, bids and schedules, or pause and
+  activate.
+- TikTok: review campaigns, ad groups, ads and performance by day or by
+  country; with a manage connection, create paused campaigns, ad groups and
+  Spark Ads, change budgets, or pause and activate.
+- Pinterest: review campaigns, ad groups, ads and performance by UTC day;
+  with a manage connection, create paused campaigns and ad groups, change
+  names, budgets, bids and schedules, or pause and activate.
+- X: review campaigns, ad groups, ads, funding and up to seven days of
+  performance per read; these reads change nothing. Offer paused campaign
+  and ad-group creation, budget, bid, schedule and status changes only when the
+  selected X connection reports `management_permission_granted=true`.
 
 Combine overlapping choices instead of listing the same workflow per channel.
 Keep the initial menu to at most seven choices. Name connected channels beside a

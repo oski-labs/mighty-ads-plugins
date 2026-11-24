@@ -2,7 +2,10 @@
   "mcpServers": {
     "mighty": {
       "type": "http",
-      "url": "https://api.mightyai.app/mcp"
+      "url": "https://api.mightyai.app/mcp",
+      "oauth": {
+        "scopes": "mcp:all user:org:read"
+      }
     }
   }
 }
