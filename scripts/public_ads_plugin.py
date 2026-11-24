@@ -40,6 +40,7 @@ REFERENCES = (
     "google-ads",
     "meta-ads",
     "microsoft-ads",
+    "pinterest-ads",
     "reddit-ads",
     "snapchat-ads",
     "tiktok-ads",
@@ -232,12 +233,26 @@ def unpack(data: bytes, client: str, version: str) -> dict[str, bytes]:
         "codex": "plugins/mighty-ads/mcp.json",
         "openai": "mcp.json",
     }[client]
-    if json.loads(files[mcp_name]).get("mcpServers") != {
-        "mighty": {
-            "type": "http" if client == "claude" else "streamable-http",
-            "url": "https://api.mightyai.app/mcp",
-        },
-    }:
+    server: dict[str, Any] = {
+        "type": "http" if client == "claude" else "streamable-http",
+        "url": "https://api.mightyai.app/mcp",
+    }
+    scoped_server = dict(server)
+    if client == "claude":
+        scoped_server["oauth"] = {"scopes": "mcp:all user:org:read"}
+    else:
+        scoped_server["extensions"] = {
+            "com.openai": {
+                "auth": {
+                    "type": "oauth",
+                    "baseScopes": ["mcp:all", "user:org:read"],
+                }
+            }
+        }
+    if json.loads(files[mcp_name]).get("mcpServers") not in (
+        {"mighty": server},
+        {"mighty": scoped_server},
+    ):
         raise ValueError("Package must use production MCP without embedded credentials")
     if client == "codex":
         catalog = json.loads(files[".agents/plugins/marketplace.json"])
